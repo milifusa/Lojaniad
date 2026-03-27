@@ -1,0 +1,355 @@
+:root {
+  --bg: #f4ede2;
+  --bg-soft: #efe2cf;
+  --panel: rgba(69, 35, 16, 0.9);
+  --panel-soft: rgba(255, 248, 237, 0.8);
+  --text: #2e1a10;
+  --text-soft: #6f4d38;
+  --accent: #b86a2f;
+  --accent-2: #1f6a4f;
+  --line: rgba(73, 36, 16, 0.14);
+  --white: #fff9f1;
+  --shadow: 0 24px 70px rgba(63, 30, 10, 0.16);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: "Manrope", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(184, 106, 47, 0.18), transparent 30%),
+    radial-gradient(circle at top right, rgba(31, 106, 79, 0.18), transparent 26%),
+    linear-gradient(180deg, #f8f2e8 0%, #f2e8da 100%);
+}
+
+.page-shell {
+  width: min(1180px, calc(100% - 32px));
+  margin: 20px auto;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  overflow: hidden;
+  background: rgba(255, 251, 245, 0.75);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow);
+}
+
+.hero {
+  padding: 28px;
+  background:
+    linear-gradient(135deg, rgba(57, 29, 12, 0.95), rgba(120, 71, 38, 0.86)),
+    linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.15));
+  color: var(--white);
+}
+
+.topbar,
+.hero-grid,
+.story-grid,
+.catalog-grid,
+.visit {
+  display: grid;
+  gap: 24px;
+}
+
+.topbar {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+}
+
+.brand-block {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-mark {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--accent), #e8b06f);
+  color: #34180b;
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.topbar h1,
+.hero-copy h2,
+.section-heading h3,
+.product-section h4,
+.visit-card h3 {
+  margin: 0;
+  font-family: "Cormorant Garamond", serif;
+  line-height: 0.95;
+}
+
+.topbar h1 {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.75rem;
+  opacity: 0.82;
+}
+
+.top-link {
+  justify-self: end;
+  color: var(--white);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 249, 241, 0.4);
+  padding-bottom: 4px;
+}
+
+.hero-grid {
+  grid-template-columns: 1.35fr 0.85fr;
+  align-items: end;
+  padding-top: 56px;
+}
+
+.hero-copy h2 {
+  font-size: clamp(3rem, 8vw, 6rem);
+  max-width: 8ch;
+}
+
+.lead,
+.section-text,
+.visit-card p,
+.story-grid p {
+  color: inherit;
+  line-height: 1.7;
+  font-size: 1rem;
+}
+
+.lead {
+  max-width: 56ch;
+  margin: 18px 0 0;
+  color: rgba(255, 249, 241, 0.88);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.button-primary {
+  background: linear-gradient(135deg, #f4b36a, #d8833f);
+  color: #40210f;
+}
+
+.button-secondary {
+  color: var(--white);
+  border: 1px solid rgba(255, 249, 241, 0.3);
+}
+
+.hero-card,
+.visit-card,
+.product-section,
+.story-grid article {
+  border-radius: 24px;
+}
+
+.hero-card {
+  padding: 24px;
+  background: rgba(255, 247, 236, 0.12);
+  border: 1px solid rgba(255, 249, 241, 0.12);
+}
+
+.card-label {
+  margin: 0 0 18px;
+  color: #ffd7b2;
+  font-weight: 700;
+}
+
+.feature-item {
+  padding: 16px 0;
+  border-top: 1px solid rgba(255, 249, 241, 0.12);
+}
+
+.feature-item span,
+.owner-box p,
+.product-tag,
+.section-badge {
+  display: block;
+  font-size: 0.76rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.feature-item strong,
+.owner-box strong,
+.product-card h5 {
+  display: block;
+  margin-top: 6px;
+}
+
+.owner-box {
+  margin-top: 20px;
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(255, 249, 241, 0.12);
+}
+
+main {
+  padding: 28px;
+}
+
+.story,
+.catalog,
+.visit {
+  padding: 30px 0;
+}
+
+.section-heading {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.section-heading h3 {
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  max-width: 12ch;
+}
+
+.story-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.story-grid article {
+  padding: 22px;
+  background: rgba(255, 248, 237, 0.7);
+  border: 1px solid var(--line);
+}
+
+.story-grid h4,
+.product-section h4 {
+  margin: 0 0 12px;
+  font-size: 1.5rem;
+}
+
+.catalog-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.product-section {
+  padding: 24px;
+  background: #4c2814;
+  color: var(--white);
+}
+
+.product-section.light {
+  background: linear-gradient(180deg, #fcf5ea, #f3e2c8);
+  color: var(--text);
+}
+
+.product-section.light .product-card {
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.section-badge {
+  margin-bottom: 16px;
+  opacity: 0.7;
+}
+
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.product-card {
+  min-height: 130px;
+  padding: 18px;
+  border-radius: 20px;
+  background: rgba(255, 248, 237, 0.1);
+  border: 1px solid rgba(255, 249, 241, 0.12);
+}
+
+.product-card h5 {
+  margin: 10px 0 8px;
+  font-size: 1.15rem;
+}
+
+.product-card p {
+  margin: 0;
+  opacity: 0.88;
+}
+
+.visit {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.visit-card {
+  padding: 28px;
+  background: var(--panel-soft);
+  border: 1px solid var(--line);
+}
+
+.contact {
+  background: linear-gradient(135deg, #194d3b, #2b7d5a);
+  color: var(--white);
+}
+
+@media (max-width: 900px) {
+  .hero-grid,
+  .catalog-grid,
+  .visit,
+  .story-grid,
+  .topbar {
+    grid-template-columns: 1fr;
+  }
+
+  .top-link {
+    justify-self: start;
+  }
+
+  .hero-copy h2,
+  .section-heading h3 {
+    max-width: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-shell {
+    width: calc(100% - 18px);
+    margin: 9px auto;
+    border-radius: 22px;
+  }
+
+  .hero,
+  main {
+    padding: 18px;
+  }
+
+  .product-list {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-copy h2 {
+    font-size: 2.9rem;
+  }
+}
