@@ -202,14 +202,14 @@ select {
 .quiz-result h3 {
   margin: 0;
   font-family: 'Cormorant Garamond', serif;
-  line-height: 0.98;
+  line-height: 1.05;
 }
 
 .hero-image-overlay h1 {
   width: 100%;
   max-width: 12ch;
   margin: 0 auto;
-  font-size: clamp(4.4rem, 8vw, 7.5rem);
+  font-size: clamp(3.8rem, 7vw, 6.2rem);
   color: #ffffff;
   text-align: center;
   text-transform: uppercase;
@@ -244,13 +244,13 @@ select {
 .featured-section,
 .testimonial-section,
 .brew-section {
-  padding: 42px 0 8px;
+  padding: 54px 0 16px;
 }
 
 .section-heading {
   display: grid;
-  gap: 16px;
-  margin-bottom: 24px;
+  gap: 22px;
+  margin-bottom: 34px;
   justify-items: center;
   text-align: center;
 }
@@ -275,7 +275,7 @@ select {
   max-width: 12ch;
   margin-inline: auto;
   text-align: center;
-  font-size: clamp(2.5rem, 5vw, 4.6rem);
+  font-size: clamp(2.2rem, 4.5vw, 3.9rem);
   letter-spacing: -0.04em;
 }
 
