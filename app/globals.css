@@ -202,7 +202,7 @@ select {
 .quiz-result h3 {
   margin: 0;
   font-family: 'Cormorant Garamond', serif;
-  line-height: 1.08;
+  line-height: 1.05;
 }
 
 .hero-image-overlay h1 {
@@ -249,10 +249,10 @@ select {
 
 .section-heading {
   display: grid;
-  gap: 14px;
-  margin-bottom: 28px;
-  justify-items: start;
-  text-align: left;
+  gap: 22px;
+  margin-bottom: 34px;
+  justify-items: center;
+  text-align: center;
 }
 
 .section-heading.split,
@@ -269,18 +269,14 @@ select {
   width: 100%;
 }
 
-.section-heading.split {
-  align-items: start;
-}
-
 .section-heading h2,
 .story-copy h2,
 .final-cta h2 {
-  max-width: 11ch;
-  margin: 0;
-  text-align: left;
-  font-size: clamp(2rem, 4.1vw, 3.4rem);
-  letter-spacing: -0.03em;
+  max-width: 12ch;
+  margin-inline: auto;
+  text-align: center;
+  font-size: clamp(2.2rem, 4.5vw, 3.9rem);
+  letter-spacing: -0.04em;
 }
 
 .section-heading p,
@@ -302,18 +298,18 @@ select {
 .section-heading > p,
 .story-copy > p,
 .final-cta > p {
-  max-width: 52ch;
-  margin: 0;
-  text-align: left;
+  max-width: 58ch;
+  margin-inline: auto;
+  text-align: center;
 }
 
 .eyebrow {
   display: inline-block;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   color: var(--accent);
   text-transform: uppercase;
-  letter-spacing: 0.22em;
-  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  font-size: 0.74rem;
 }
 
 .value-grid,
@@ -803,18 +799,6 @@ select {
 
   .header-brand-center {
     order: -1;
-  }
-
-  .section-heading,
-  .section-heading h2,
-  .section-heading > p,
-  .story-copy,
-  .story-copy h2,
-  .story-copy > p,
-  .final-cta h2,
-  .final-cta > p {
-    text-align: left;
-    justify-items: start;
   }
 
   .hero-home {
