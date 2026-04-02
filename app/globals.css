@@ -272,10 +272,11 @@ select {
 .section-heading h2,
 .story-copy h2,
 .final-cta h2 {
-  max-width: 12ch;
+  max-width: 18ch;
   margin-inline: auto;
   text-align: center;
-  font-size: clamp(2.2rem, 4.5vw, 3.9rem);
+  text-wrap: balance;
+  font-size: clamp(1.95rem, 3.8vw, 3.2rem);
   letter-spacing: -0.04em;
 }
 
