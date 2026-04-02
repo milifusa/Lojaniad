@@ -1,180 +1,183 @@
 export const defaultContent = {
   brand: {
     name: 'Lojanias',
-    tagline: 'Cafe de altura de Loja, Ecuador',
+    tagline: 'Cafe de altura | Loja, Ecuador',
     owner: 'Miguel Castillo',
-    ctaLabel: 'Comprar coleccion',
+    ctaLabel: 'Ver coleccion',
     ctaHref: '#coleccion',
-    secondaryCtaLabel: 'Conocer origen',
+    secondaryCtaLabel: 'Conocer la marca',
     secondaryCtaHref: '#historia',
-    adminLabel: 'Panel admin'
+    adminLabel: 'Admin'
   },
   hero: {
-    eyebrow: 'Origen andino | 100% arabica',
-    title: 'Cafe premium con alma lojana y presencia contemporanea.',
+    eyebrow: 'Cafe de altura con presencia sobria y contemporanea',
+    title: 'Una marca de Loja creada para vender cafe con elegancia y claridad.',
     description:
-      'Una experiencia de altura para quienes valoran origen, notas sensoriales definidas y una compra que se siente tan cuidada como la taza.',
+      'Lojanias presenta cafe de altura y aceite de coco en una experiencia minimalista, calida y facil de recorrer. Menos ruido visual, mas foco en producto, origen y confianza de compra.',
     metrics: [
-      { label: 'Altura', value: '1.500 - 2.100 msnm' },
-      { label: 'Tueste', value: 'Medio y medio-oscuro' },
-      { label: 'Entrega', value: 'Directa desde Loja' }
+      { label: 'Origen', value: 'Loja, Ecuador' },
+      { label: 'Dueno', value: 'Miguel Castillo' },
+      { label: 'Linea', value: 'Cafe y aceite de coco' }
     ]
   },
   valueProps: [
     {
       title: 'Origen de altura',
-      text: 'Cafe cultivado en zonas altas de Loja, con trazabilidad y expresion limpia en taza.',
-      stat: 'Loja, Ecuador'
+      text: 'Cafe trabajado en origen y presentado como producto de identidad lojana.',
+      stat: 'Loja'
     },
     {
-      title: 'Perfil sensorial claro',
-      text: 'Notas a cacao, panela, frutos secos y acidez brillante segun la presentacion.',
-      stat: 'Cuerpo medio'
+      title: 'Presentaciones claras',
+      text: 'Formatos y tamanos visibles para facilitar la decision de compra.',
+      stat: 'Compra simple'
     },
     {
-      title: 'Tueste y molienda en origen',
-      text: 'Control del proceso para mantener frescura, aroma y consistencia de compra.',
-      stat: 'Lotes cuidados'
+      title: 'Estetica sobria',
+      text: 'Una tienda visualmente limpia para resaltar calidad y confianza.',
+      stat: 'Minimal premium'
     },
     {
-      title: 'Compra confiable',
-      text: 'Seleccion premium, empaque elegante y experiencia directa de marca a cliente.',
-      stat: 'Pago simple'
+      title: 'Navegacion directa',
+      text: 'Hero, beneficios, colecciones, historia y CTA pensados para conversion.',
+      stat: 'Ecommerce moderno'
     }
   ],
   featuredProducts: [
     {
-      id: 'cafe-noir',
-      name: 'Cafe Especial Noir',
+      id: 'cafe-noir-200',
+      name: 'Cafe Especial de Altura',
       category: 'Cafe de altura',
-      format: 'Bolsa premium',
-      size: '250 g',
-      price: '$9.90',
-      notes: 'Cacao oscuro, almendra tostada y caramelo.',
-      roast: 'Medio oscuro',
-      method: 'Espresso, moka, prensa',
+      format: 'Bolsa negra premium',
+      size: '200 g',
+      price: '$8.50',
+      notes: 'Perfil intenso, limpio y elegante con notas achocolatadas.',
+      roast: 'Tueste medio oscuro',
+      method: 'Espresso, moka, prensa francesa',
       intensity: 4,
       acidity: 2,
       body: 4,
-      badge: 'Mas vendido',
-      imageStyle: 'dark-bag'
+      badge: 'Cafe insignia',
+      imageStyle: 'dark-bag',
+      imageUrl: ''
     },
     {
-      id: 'cafe-reserva',
-      name: 'Cafe Reserva Loja',
+      id: 'cafe-kraft-200',
+      name: 'Cafe Natural de Altura',
       category: 'Cafe de altura',
-      format: 'Bolsa kraft',
+      format: 'Bolsa kraft clasica',
       size: '200 g',
-      price: '$8.50',
-      notes: 'Panela, cacao dulce y final achocolatado.',
-      roast: 'Medio',
-      method: 'Filtro, V60, Chemex',
+      price: '$7.90',
+      notes: 'Dulzor balanceado, textura suave y final redondo.',
+      roast: 'Tueste medio',
+      method: 'V60, Chemex, filtro',
       intensity: 3,
       acidity: 3,
       body: 3,
       badge: 'Origen Loja',
-      imageStyle: 'kraft-bag'
+      imageStyle: 'kraft-bag',
+      imageUrl: ''
     },
     {
-      id: 'aceite-coco',
-      name: 'Aceite de Coco Virgen',
+      id: 'aceite-coco-500',
+      name: 'Aceite de Coco',
       category: 'Aceite de coco',
       format: 'Frasco de vidrio',
       size: '500 ml',
       price: '$12.00',
-      notes: 'Textura sedosa, aroma natural y uso versatil.',
+      notes: 'Textura sedosa, aroma natural y uso diario en cocina y bienestar.',
       roast: 'Natural',
-      method: 'Cocina, bienestar, reposteria',
+      method: 'Cocina, reposteria, consumo diario',
       intensity: 2,
       acidity: 1,
       body: 5,
-      badge: 'Complemento estrella',
-      imageStyle: 'coconut-jar'
+      badge: 'Linea complementaria',
+      imageStyle: 'coconut-jar',
+      imageUrl: ''
     }
   ],
   sensory: {
-    title: 'Una taza con capas de aroma, dulzor y permanencia.',
+    title: 'Notas claras, lectura facil y una experiencia de compra mas serena.',
     description:
-      'Lojanias convierte atributos tecnicos en una experiencia facil de entender: origen, proceso, perfil y metodo ideal se muestran de forma visual y aspiracional.',
-    notes: ['Cacao', 'Panela', 'Nuez', 'Caramelo', 'Floral suave', 'Citricos finos'],
-    methods: ['V60', 'Prensa francesa', 'Espresso', 'Moka'],
-    roastLabel: 'Tueste balanceado para taza diaria y momentos especiales.'
+      'La pagina prioriza origen, notas de sabor, metodo sugerido y presentacion del producto, evitando saturacion visual. El cafe es el centro y el recorrido se siente mas premium.',
+    notes: ['Cacao', 'Panela', 'Frutos secos', 'Caramelo suave', 'Aroma limpio', 'Final redondo'],
+    methods: ['V60', 'Espresso', 'Prensa', 'Moka'],
+    roastLabel: 'Cafe pensado para consumo diario con perfil elegante y bien definido.'
   },
   story: {
     eyebrow: 'Historia de marca',
-    title: 'Lojanias nace para elevar el cafe lojanio a una experiencia de marca premium.',
+    title: 'Lojanias pone en primer plano el origen lojanio y una forma sobria de vender mejor.',
     paragraphs: [
-      'Desde Loja, Miguel Castillo impulsa una propuesta que une cafe de altura, presentacion cuidada y una narrativa de origen que conecta con quienes buscan algo mas que solo cafe.',
-      'La marca pone en primer plano la procedencia, el trabajo en origen y el ritual cotidiano de preparar una buena taza, con una estetica calida, moderna y confiable.'
+      'La marca nace en Loja, Ecuador, con la vision de Miguel Castillo de convertir el cafe de altura en una experiencia de compra mas cuidada, moderna y confiable.',
+      'El objetivo no es solo mostrar producto, sino transmitir origen, presentacion y una sensacion de calidad que invite a quedarse, explorar y comprar con seguridad.'
     ]
   },
   quiz: {
     title: 'Encuentra tu cafe ideal',
     description:
-      'Responde tres preferencias y recibe una recomendacion inmediata con el estilo de cafe o producto que mejor encaja contigo.',
+      'Una herramienta simple para orientar al visitante segun gusto, metodo de preparacion y momento de consumo.',
     questions: [
       {
         id: 'taste',
-        label: 'Que perfil prefieres?',
-        options: ['Intenso y achocolatado', 'Equilibrado y dulce', 'Suave y aromatico']
+        label: 'Que perfil te atrae mas?',
+        options: ['Intenso y profundo', 'Balanceado y dulce', 'Ligero y aromatico']
       },
       {
         id: 'method',
-        label: 'Como sueles prepararlo?',
-        options: ['Espresso o moka', 'Filtro o V60', 'Busco algo versatil']
+        label: 'Como lo preparas normalmente?',
+        options: ['Espresso o moka', 'Filtro o V60', 'Quiero algo versatil']
       },
       {
         id: 'moment',
-        label: 'Para que momento lo quieres?',
-        options: ['Empezar el dia', 'Disfrutar con calma', 'Regalar o compartir']
+        label: 'Para que lo quieres?',
+        options: ['Uso diario', 'Disfrutar con calma', 'Regalar o compartir']
       }
     ]
   },
   testimonials: [
     {
-      name: 'Andrea P.',
-      role: 'Cliente recurrente',
-      quote: 'Se siente como una marca cuidada de principio a fin: empaque bonito, aroma potente y taza consistente.',
+      name: 'Cliente local',
+      role: 'Loja',
+      quote: 'La presentacion se siente fina, el recorrido es claro y el producto transmite mas valor.',
       rating: 5
     },
     {
-      name: 'Daniel M.',
-      role: 'Amante del cafe filtrado',
-      quote: 'La explicacion de notas y metodo hace facil elegir. El cafe reserva tiene un perfil muy limpio.',
+      name: 'Cliente frecuente',
+      role: 'Cafe en casa',
+      quote: 'La nueva estructura deja entender rapido cual cafe elegir y se siente mucho mas elegante.',
       rating: 5
     },
     {
-      name: 'Sofia R.',
-      role: 'Compra para regalo',
-      quote: 'La experiencia visual y el producto transmiten calidad. Es un regalo con presencia.',
+      name: 'Compra para regalo',
+      role: 'Experiencia de marca',
+      quote: 'La marca se percibe sobria y premium, ideal para regalar o vender con mejor presencia.',
       rating: 5
     }
   ],
   brewTips: [
     {
-      title: 'Molienda correcta',
-      text: 'Ajusta la molienda segun el metodo para evitar una extraccion plana o demasiado agresiva.'
+      title: 'Usa agua limpia',
+      text: 'La calidad del agua cambia la taza. Filtrada y a temperatura estable funciona mejor.'
     },
     {
-      title: 'Agua limpia y temperatura estable',
-      text: 'Usa agua filtrada entre 90 y 96 grados para resaltar dulzor y aroma.'
+      title: 'Ajusta la molienda',
+      text: 'Mas fina para espresso, mas gruesa para prensa. Ese cambio ya mejora mucho el resultado.'
     },
     {
-      title: 'Ritual de servicio',
-      text: 'Sirve en taza precalentada y deja respirar el cafe unos segundos antes del primer sorbo.'
+      title: 'Sirve sin prisa',
+      text: 'Una taza bien servida y una presentacion cuidada elevan la experiencia completa.'
     }
   ],
   finalCta: {
-    title: 'Haz de cada taza una experiencia de altura.',
-    description: 'Compra la coleccion destacada o descubre el cafe que mejor va contigo.',
-    primaryLabel: 'Ir a la tienda',
-    secondaryLabel: 'Hablar por WhatsApp'
+    title: 'Explora la coleccion y convierte el origen en una compra memorable.',
+    description: 'Cafe de altura, presentaciones claras y una marca con identidad local.',
+    primaryLabel: 'Entrar a la tienda',
+    secondaryLabel: 'Contactar por WhatsApp'
   },
   footer: {
     address: 'Loja, Ecuador',
-    phone: '+593 99 000 0000',
+    phone: '+593990000000',
     email: 'hola@lojanias.com',
     instagram: '@lojanias',
-    legal: '© 2026 Lojanias. Todos los derechos reservados.'
+    legal: '© 2026 Lojanias. Cafe de altura de Loja, Ecuador.'
   }
 };

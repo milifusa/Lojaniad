@@ -21,21 +21,27 @@ function MetricBar({ label, value }) {
 }
 
 function getRecommendation(answers, products) {
-  const [intense, balanced, smooth] = products;
-
-  if (answers.taste === 'Intenso y achocolatado' || answers.method === 'Espresso o moka') {
-    return intense;
-  }
-
-  if (answers.taste === 'Suave y aromatico' || answers.method === 'Filtro o V60') {
-    return balanced;
-  }
+  const coffeeDark = products[0];
+  const coffeeBalanced = products[1] || products[0];
+  const coconut = products[2] || products[1] || products[0];
 
   if (answers.moment === 'Regalar o compartir') {
-    return smooth || balanced;
+    return coffeeBalanced;
   }
 
-  return balanced;
+  if (answers.taste === 'Intenso y profundo' || answers.method === 'Espresso o moka') {
+    return coffeeDark;
+  }
+
+  if (answers.taste === 'Ligero y aromatico' || answers.method === 'Filtro o V60') {
+    return coffeeBalanced;
+  }
+
+  if (answers.method === 'Quiero algo versatil') {
+    return coffeeBalanced;
+  }
+
+  return coconut.category === 'Aceite de coco' && answers.taste === '' ? coffeeBalanced : coffeeBalanced;
 }
 
 export function SiteShell() {
@@ -62,7 +68,7 @@ export function SiteShell() {
           }
         });
       },
-      { threshold: 0.18 }
+      { threshold: 0.15 }
     );
 
     document.querySelectorAll('[data-reveal]').forEach((node) => observer.observe(node));
@@ -76,80 +82,56 @@ export function SiteShell() {
   );
 
   const methodsMap = {
-    V60: 'Limpia la taza y resalta notas dulces y citricas con una extraccion precisa.',
-    Espresso: 'Mayor intensidad, cuerpo redondo y final largo para quien busca profundidad.',
-    Prensa: 'Textura amplia y una experiencia aromatica mas envolvente.',
-    Moka: 'Perfil vibrante, persistente y perfecto para las primeras horas del dia.'
+    V60: 'Extrae una taza limpia y ordenada, ideal para un perfil balanceado y elegante.',
+    Espresso: 'Concentra cuerpo y profundidad para quien quiere una experiencia mas intensa.',
+    Prensa: 'Resalta textura y amplitud aromatica con una preparacion simple.',
+    Moka: 'Aporta fuerza, estructura y un perfil persistente para la rutina diaria.'
   };
+
+  const coffeeProducts = content.featuredProducts.filter((product) => product.category === 'Cafe de altura');
+  const coconutProducts = content.featuredProducts.filter((product) => product.category === 'Aceite de coco');
 
   return (
     <div className="site-root">
-      <header className="site-header">
-        <div className="brand-lockup" data-reveal>
-          <img className="brand-logo" src="/brand/logo-lojanias-white.png" alt="Logo Lojanias" />
-          <div>
-            <p>{content.brand.tagline}</p>
-            <strong>{content.brand.name}</strong>
-          </div>
-        </div>
-        <nav className="main-nav" aria-label="Principal">
-          <a href="#coleccion">Tienda</a>
-          <a href="#sensorial">Experiencia</a>
-          <a href="#historia">Origen</a>
-          <a href="#testimonios">Resenas</a>
-          <Link href="/admin">{content.brand.adminLabel}</Link>
+      <header className="site-header site-header-home" data-reveal>
+        <nav className="nav-side nav-left" aria-label="Principal izquierda">
+          <a href="#inicio">Inicio</a>
+          <a href="#historia">Lojanias</a>
+          <a href="#sensorial">Perfil</a>
         </nav>
-        <a className="nav-cta" href={content.brand.ctaHref}>{content.brand.ctaLabel}</a>
+        <div className="header-brand-center">
+          <span className="header-wordmark">{content.brand.name}</span>
+        </div>
+        <nav className="nav-side nav-right" aria-label="Principal derecha">
+          <a href="#coleccion">Tienda</a>
+          <a href="#historia">Nuestras raices</a>
+          <a href="#cta-final">Contacto</a>
+          <a href="#coleccion" className="cart-link" aria-label="Carrito">🛒</a>
+        </nav>
       </header>
 
-      <main>
-        <section className="hero-section">
-          <div className="hero-copy" data-reveal>
-            <span className="eyebrow">{content.hero.eyebrow}</span>
-            <h1>{content.hero.title}</h1>
-            <p>{content.hero.description}</p>
-            <div className="hero-actions">
-              <a className="button button-primary" href={content.brand.ctaHref}>{content.brand.ctaLabel}</a>
-              <a className="button button-secondary" href={content.brand.secondaryCtaHref}>{content.brand.secondaryCtaLabel}</a>
-            </div>
-            <div className="hero-metrics">
-              {content.hero.metrics.map((metric) => (
-                <div key={metric.label}>
-                  <span>{metric.label}</span>
-                  <strong>{metric.value}</strong>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="hero-stage" data-reveal>
-            <div className="hero-orb hero-orb-a" />
-            <div className="hero-orb hero-orb-b" />
-            <div className="stage-card stage-card-back" />
-            <div className="stage-card stage-card-front">
-              <div className="stage-bag dark" />
-              <div className="stage-bag kraft" />
-              <div className="stage-cup" />
-            </div>
-            <div className="stage-notes">
-              <span>Notas</span>
-              <strong>Cacao, panela, nuez</strong>
-            </div>
+      <main id="inicio">
+        <section className="hero-section hero-home" data-reveal>
+          <div className="hero-image-overlay">
+            <img className="hero-center-logo" src="/brand/logo-lojanias-transparent.png" alt="Logo Lojanias" />
+            <h1>{content.brand.name}</h1>
+            <p>CAFES EXTRAORDINARIOS. ORIGEN LOJANO.</p>
+            <a className="hero-outline-cta" href="#coleccion">CONOCE NUESTROS CAFES</a>
           </div>
         </section>
 
         <section className="value-section" data-reveal>
-          <div className="section-heading split">
+          <div className="section-heading split compact">
             <div>
               <span className="eyebrow">Propuesta de valor</span>
-              <h2>Buenas practicas de ecommerce, narrativa de origen y compra clara.</h2>
+              <h2>Elegancia visual, lectura rapida y foco real en producto.</h2>
             </div>
             <p>
-              La estructura toma referencias de tiendas de cafe de especialidad y patrones Shopify: navegacion limpia,
-              beneficios visibles, colecciones destacadas y bloques faciles de escanear para empujar exploracion y conversion.
+              La pagina se reordena para sentirse mas premium: menos color, menos artificio, mas espacio, mejor jerarquia
+              y una navegacion que prioriza colecciones, origen y conversion.
             </p>
           </div>
-          <div className="value-grid">
+          <div className="value-grid four-up">
             {content.valueProps.map((item) => (
               <article key={item.title} className="value-card">
                 <span>{item.stat}</span>
@@ -160,14 +142,57 @@ export function SiteShell() {
           </div>
         </section>
 
-        <section className="featured-section" id="coleccion">
+        <section className="collection-section" id="coleccion">
           <div className="section-heading" data-reveal>
-            <span className="eyebrow">Coleccion destacada</span>
-            <h2>Productos premium listos para comprar.</h2>
+            <span className="eyebrow">Colecciones</span>
+            <h2>Productos separados por categoria para comprar sin friccion.</h2>
+          </div>
+
+          <div className="collection-grid">
+            <article className="collection-card" data-reveal>
+              <div className="collection-header">
+                <span>Categoria principal</span>
+                <h3>Cafe de altura</h3>
+                <p>Presentaciones clasicas, premium y listas para consumo diario o regalo.</p>
+              </div>
+              <ul className="collection-list">
+                <li>Bolsa negra premium 200 g</li>
+                <li>Bolsa kraft clasica 200 g</li>
+                <li>Presentaciones medianas y familiares</li>
+                <li>Opciones para grano o molido segun disponibilidad</li>
+              </ul>
+            </article>
+
+            <article className="collection-card" data-reveal>
+              <div className="collection-header">
+                <span>Categoria complementaria</span>
+                <h3>Aceite de coco</h3>
+                <p>Una linea natural en distintos tamanos para complementar la tienda.</p>
+              </div>
+              <ul className="collection-list">
+                <li>Frasco pequeno</li>
+                <li>Frasco mediano</li>
+                <li>Frasco grande</li>
+                <li>Formato familiar</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <section className="featured-section">
+          <div className="section-heading split compact" data-reveal>
+            <div>
+              <span className="eyebrow">Destacados</span>
+              <h2>La seleccion visible arriba del scroll importante.</h2>
+            </div>
+            <p>
+              Esta zona sigue patrones de ecommerce que funcionan: card clara, informacion resumida, precio visible
+              y CTA rapido sin distraer del producto.
+            </p>
           </div>
           <div className="product-grid">
-            {content.featuredProducts.map((product, index) => (
-              <article key={product.id} className={`product-card premium-card tone-${index + 1}`} data-reveal>
+            {content.featuredProducts.map((product) => (
+              <article key={product.id} className="product-card" data-reveal>
                 <div className="product-topline">
                   <span>{product.badge}</span>
                   <strong>{product.category}</strong>
@@ -206,15 +231,15 @@ export function SiteShell() {
             </div>
             <p className="roast-callout">{content.sensory.roastLabel}</p>
           </div>
-          <div className="sensory-panel premium-card" data-reveal>
+          <div className="sensory-panel" data-reveal>
             <div className="metric-panel">
-              <h3>Perfil del cafe insignia</h3>
+              <h3>Lectura rapida del perfil</h3>
               <MetricBar label="Intensidad" value={4} />
               <MetricBar label="Acidez" value={3} />
               <MetricBar label="Cuerpo" value={4} />
             </div>
             <div className="brew-selector">
-              <h3>Metodo sugerido</h3>
+              <h3>Metodo recomendado</h3>
               <div className="method-tabs">
                 {content.sensory.methods.map((method) => (
                   <button
@@ -233,13 +258,6 @@ export function SiteShell() {
         </section>
 
         <section className="story-section" id="historia">
-          <div className="story-visual" data-reveal>
-            <div className="origin-map">
-              <span>Loja</span>
-              <strong>Andes del sur del Ecuador</strong>
-              <p>Lotes de altura, trabajo en origen y una expresion elegante en taza.</p>
-            </div>
-          </div>
           <div className="story-copy" data-reveal>
             <span className="eyebrow">{content.story.eyebrow}</span>
             <h2>{content.story.title}</h2>
@@ -247,13 +265,32 @@ export function SiteShell() {
               <p key={paragraph}>{paragraph}</p>
             ))}
             <div className="owner-signature">
-              <span>Fundador</span>
+              <span>Direccion de marca</span>
               <strong>{content.brand.owner}</strong>
             </div>
           </div>
+          <div className="story-panel" data-reveal>
+            <div className="story-facts">
+              <div>
+                <span>Ciudad</span>
+                <strong>Loja</strong>
+              </div>
+              <div>
+                <span>Pais</span>
+                <strong>Ecuador</strong>
+              </div>
+              <div>
+                <span>Marca</span>
+                <strong>{content.brand.name}</strong>
+              </div>
+            </div>
+            <p>
+              El tono general del sitio busca que el visitante sienta origen, confianza y calidad antes de llegar al detalle de compra.
+            </p>
+          </div>
         </section>
 
-        <section className="quiz-section premium-card" data-reveal>
+        <section className="quiz-section" data-reveal>
           <div className="section-heading split compact">
             <div>
               <span className="eyebrow">Funcionalidad interactiva</span>
@@ -291,7 +328,7 @@ export function SiteShell() {
                 <strong>{recommendation.size}</strong>
                 <strong>{recommendation.method}</strong>
               </div>
-              <a className="button button-primary" href="#coleccion">Ver este producto</a>
+              <a className="button button-primary" href="#coleccion">Ver producto</a>
             </div>
           </div>
         </section>
@@ -299,11 +336,11 @@ export function SiteShell() {
         <section className="testimonial-section" id="testimonios">
           <div className="section-heading" data-reveal>
             <span className="eyebrow">Prueba social</span>
-            <h2>Confianza de compra respaldada por experiencia real.</h2>
+            <h2>Confianza y lectura inmediata de marca.</h2>
           </div>
           <div className="testimonial-grid">
             {content.testimonials.map((item) => (
-              <article key={item.name} className="testimonial-card" data-reveal>
+              <article key={item.name + item.role} className="testimonial-card" data-reveal>
                 <div className="stars" aria-label={`${item.rating} de 5 estrellas`}>
                   {'★★★★★'.slice(0, item.rating)}
                 </div>
@@ -319,9 +356,9 @@ export function SiteShell() {
           <div className="section-heading split compact">
             <div>
               <span className="eyebrow">Preparacion</span>
-              <h2>Como disfrutarlo mejor en casa o en tu espacio de trabajo.</h2>
+              <h2>Una guia corta para disfrutar mejor el producto.</h2>
             </div>
-            <p>Consejos breves para elevar la experiencia sin volverla compleja.</p>
+            <p>Consejos simples para elevar la taza sin sobrecargar al usuario con demasiada informacion.</p>
           </div>
           <div className="brew-grid">
             {content.brewTips.map((tip) => (
@@ -333,13 +370,15 @@ export function SiteShell() {
           </div>
         </section>
 
-        <section className="final-cta premium-card" id="cta-final" data-reveal>
+        <section className="final-cta" id="cta-final" data-reveal>
           <span className="eyebrow">Compra directa</span>
           <h2>{content.finalCta.title}</h2>
           <p>{content.finalCta.description}</p>
           <div className="hero-actions center">
             <a className="button button-primary" href="#coleccion">{content.finalCta.primaryLabel}</a>
-            <a className="button button-secondary dark" href={`https://wa.me/${content.footer.phone.replace(/\D/g, '')}`}>{content.finalCta.secondaryLabel}</a>
+            <a className="button button-secondary dark" href={`https://wa.me/${content.footer.phone.replace(/\D/g, '')}`}>
+              {content.finalCta.secondaryLabel}
+            </a>
           </div>
         </section>
       </main>

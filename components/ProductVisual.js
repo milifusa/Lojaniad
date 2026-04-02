@@ -3,11 +3,11 @@
 function CoffeeBag({ variant }) {
   return (
     <div className={`bag bag-${variant}`} aria-hidden="true">
-      <div className="bag-zip" />
-      <div className="bag-valve" />
-      <div className="bag-label">
+      <div className="bag-top" />
+      <div className="bag-dot" />
+      <div className="bag-copy">
         <span>Lojanias</span>
-        <strong>CAFE DE ALTURA</strong>
+        <strong>{variant === 'kraft' ? 'CAFE NATURAL' : 'CAFE ESPECIAL'}</strong>
       </div>
     </div>
   );
@@ -17,7 +17,7 @@ function Jar() {
   return (
     <div className="jar" aria-hidden="true">
       <div className="jar-lid" />
-      <div className="jar-label">
+      <div className="jar-copy">
         <span>Lojanias</span>
         <strong>Aceite de coco</strong>
       </div>
@@ -35,10 +35,11 @@ export function ProductVisual({ product }) {
   }
 
   return (
-    <div className="product-visual">
+    <div className="product-visual fallback-visual">
       {product.imageStyle === 'dark-bag' ? <CoffeeBag variant="dark" /> : null}
       {product.imageStyle === 'kraft-bag' ? <CoffeeBag variant="kraft" /> : null}
       {product.imageStyle === 'coconut-jar' ? <Jar /> : null}
+      <div className="visual-caption">Espacio listo para integrar la foto real del producto.</div>
     </div>
   );
 }
