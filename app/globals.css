@@ -251,6 +251,8 @@ select {
   display: grid;
   gap: 16px;
   margin-bottom: 24px;
+  justify-items: center;
+  text-align: center;
 }
 
 .section-heading.split,
@@ -262,10 +264,17 @@ select {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.section-heading.split > div,
+.section-heading.split > p {
+  width: 100%;
+}
+
 .section-heading h2,
 .story-copy h2,
 .final-cta h2 {
   max-width: 12ch;
+  margin-inline: auto;
+  text-align: center;
   font-size: clamp(2.5rem, 5vw, 4.6rem);
   letter-spacing: -0.04em;
 }
@@ -284,6 +293,14 @@ select {
 .admin-message {
   color: var(--muted);
   line-height: 1.8;
+}
+
+.section-heading > p,
+.story-copy > p,
+.final-cta > p {
+  max-width: 58ch;
+  margin-inline: auto;
+  text-align: center;
 }
 
 .eyebrow {
