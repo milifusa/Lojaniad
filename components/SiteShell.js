@@ -100,7 +100,7 @@ export function SiteShell() {
           <a href="#sensorial">Perfil</a>
         </nav>
         <div className="header-brand-center">
-          <img className="header-wordmark-image" src="/brand/logo-lojanias-wordmark-dark.png" alt="Lojanias" />
+          <span className="header-wordmark-text">Lojanias</span>
         </div>
         <nav className="nav-side nav-right" aria-label="Principal derecha">
           <a href="#coleccion">Tienda</a>
@@ -114,7 +114,7 @@ export function SiteShell() {
         <section className="hero-section hero-home" data-reveal>
           <div className="hero-image-overlay">
             <img className="hero-center-logo" src="/brand/logo-lojanias-transparent.png" alt="Logo Lojanias" />
-            <img className="hero-wordmark" src="/brand/logo-lojanias-wordmark.png" alt="Lojanias" />
+            <span className="hero-wordmark-text">Lojanias</span>
             <p>CAFES EXTRAORDINARIOS. ORIGEN LOJANO.</p>
             <a className="hero-outline-cta" href="#coleccion">CONOCE NUESTROS CAFES</a>
           </div>

@@ -102,19 +102,21 @@ select {
   justify-content: center;
 }
 
-.header-wordmark-image {
-  width: min(520px, 34vw);
-  height: auto;
-  object-fit: contain;
-  display: block;
+.header-wordmark-text {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(2.4rem, 4.2vw, 3.9rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #171311;
 }
 
-.hero-wordmark {
-  width: min(760px, 58vw);
-  height: auto;
-  object-fit: contain;
-  display: block;
-  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.35));
+.hero-wordmark-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(4.2rem, 8vw, 7rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  text-shadow: 0 10px 24px rgba(0, 0, 0, 0.38);
 }
 
 .cart-link {
@@ -849,12 +851,12 @@ select {
     border-radius: 24px 24px 0 0;
   }
 
-  .header-wordmark-image {
-    width: min(300px, 46vw);
+  .header-wordmark-text {
+    font-size: 2rem;
   }
 
-  .hero-wordmark {
-    width: min(420px, 72vw);
+  .hero-wordmark-text {
+    font-size: 3.4rem;
   }
 
   .cart-link {
