@@ -106,13 +106,14 @@ select {
   width: min(520px, 34vw);
   height: auto;
   object-fit: contain;
-  filter: brightness(0) saturate(100%);
+  display: block;
 }
 
 .hero-wordmark {
   width: min(760px, 58vw);
   height: auto;
   object-fit: contain;
+  display: block;
   filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.35));
 }
 

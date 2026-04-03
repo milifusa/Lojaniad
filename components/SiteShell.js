@@ -100,7 +100,7 @@ export function SiteShell() {
           <a href="#sensorial">Perfil</a>
         </nav>
         <div className="header-brand-center">
-          <img className="header-wordmark-image" src="/brand/logo-lojanias-wordmark.png" alt="Lojanias" />
+          <img className="header-wordmark-image" src="/brand/logo-lojanias-wordmark-dark.png" alt="Lojanias" />
         </div>
         <nav className="nav-side nav-right" aria-label="Principal derecha">
           <a href="#coleccion">Tienda</a>
