@@ -102,12 +102,18 @@ select {
   justify-content: center;
 }
 
-.header-wordmark {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: clamp(2.2rem, 4vw, 3.6rem);
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+.header-wordmark-image {
+  width: min(520px, 34vw);
+  height: auto;
+  object-fit: contain;
+  filter: brightness(0) saturate(100%);
+}
+
+.hero-wordmark {
+  width: min(760px, 58vw);
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.35));
 }
 
 .cart-link {
@@ -205,17 +211,6 @@ select {
   line-height: 1.05;
 }
 
-.hero-image-overlay h1 {
-  width: 100%;
-  max-width: 12ch;
-  margin: 0 auto;
-  font-size: clamp(3.8rem, 7vw, 6.2rem);
-  color: #ffffff;
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.32);
-}
 
 .hero-image-overlay p {
   width: 100%;
@@ -853,8 +848,12 @@ select {
     border-radius: 24px 24px 0 0;
   }
 
-  .header-wordmark {
-    font-size: 1.9rem;
+  .header-wordmark-image {
+    width: min(300px, 46vw);
+  }
+
+  .hero-wordmark {
+    width: min(420px, 72vw);
   }
 
   .cart-link {
