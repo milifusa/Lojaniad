@@ -96,15 +96,21 @@ export function SiteShell() {
       <header className="site-header site-header-home" data-reveal>
         <nav className="nav-side nav-left" aria-label="Principal izquierda">
           <a href="#inicio">Inicio</a>
-          <a href="#historia">Lojanias</a>
+          <a href="#historia">Nuestras raices</a>
           <a href="#sensorial">Perfil</a>
         </nav>
-        <div className="header-brand-center">
-          <span className="header-wordmark-text">Lojanias</span>
+        <div className="nav-brand">
+          <img
+            className="nav-brand-logo"
+            src="/brand/lojanias-wordmark-isolated.png"
+            alt="Lojanias"
+            width="966"
+            height="298"
+          />
         </div>
         <nav className="nav-side nav-right" aria-label="Principal derecha">
           <a href="#coleccion">Tienda</a>
-          <a href="#historia">Nuestras raices</a>
+          <a href="#historia">Lojanias</a>
           <a href="#cta-final">Contacto</a>
           <a href="#coleccion" className="cart-link" aria-label="Carrito">🛒</a>
         </nav>
@@ -113,10 +119,17 @@ export function SiteShell() {
       <main id="inicio">
         <section className="hero-section hero-home" data-reveal>
           <div className="hero-image-overlay">
-            <img className="hero-center-logo" src="/brand/logo-lojanias-transparent.png" alt="Logo Lojanias" />
-            <span className="hero-wordmark-text">Lojanias</span>
-            <p>CAFES EXTRAORDINARIOS. ORIGEN LOJANO.</p>
-            <a className="hero-outline-cta" href="#coleccion">CONOCE NUESTROS CAFES</a>
+            <div className="hero-content">
+              <img
+                className="hero-wordmark-logo"
+                src="/brand/lojanias-wordmark-hero-cream.png"
+                alt="Lojanias"
+                width="926"
+                height="252"
+              />
+              <p>CAFES EXTRAORDINARIOS. ORIGEN LOJANO.</p>
+              <a className="hero-outline-cta" href="#coleccion">CONOCE NUESTROS CAFES</a>
+            </div>
           </div>
         </section>
 
@@ -124,11 +137,11 @@ export function SiteShell() {
           <div className="section-heading split compact">
             <div>
               <span className="eyebrow">Propuesta de valor</span>
-              <h2>Elegancia visual, lectura rapida y foco real en producto.</h2>
+              <h2>Nuestra Herencia Loja</h2>
             </div>
             <p>
-              La pagina se reordena para sentirse mas premium: menos color, menos artificio, mas espacio, mejor jerarquia
-              y una navegacion que prioriza colecciones, origen y conversion.
+              Cafe de altura, oficio artesanal y una estetica sobria que honra el origen lojano con una experiencia
+              clara, calida y memorable.
             </p>
           </div>
           <div className="value-grid four-up">
