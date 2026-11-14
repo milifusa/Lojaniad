@@ -1,5 +1,7 @@
 import { SiteShell } from '@/components/SiteShell';
+import { getPublishedContent } from '@/lib/published-content';
 
-export default function HomePage() {
-  return <SiteShell />;
+
+export default async function HomePage() {
+  return <SiteShell content={await getPublishedContent()} />;
 }

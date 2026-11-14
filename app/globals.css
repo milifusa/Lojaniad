@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 :root {
   --cream: #F7F4EE;
@@ -31,7 +31,7 @@ html {
 
 body {
   margin: 0;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Plus Jakarta Sans', Arial, sans-serif;
   color: var(--espresso);
   background: var(--cream);
 }
@@ -159,7 +159,6 @@ select {
 }
 
 .header-wordmark-text {
-  font-family: 'Playfair Display', serif;
   font-size: clamp(2rem, 3.2vw, 3rem);
   font-weight: 800;
   letter-spacing: 0;
@@ -168,7 +167,6 @@ select {
 }
 
 .hero-wordmark-text {
-  font-family: 'Playfair Display', serif;
   font-size: clamp(4.4rem, 9vw, 9rem);
   font-weight: 800;
   letter-spacing: 0;
@@ -288,7 +286,6 @@ select {
 .product-body h3,
 .quiz-result h3 {
   margin: 0;
-  font-family: 'Playfair Display', serif;
   line-height: 1.05;
 }
 

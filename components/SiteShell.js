@@ -1,416 +1,452 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
-import { getDefaultContent, mergeWithDefaults, STORAGE_KEY } from '@/lib/content-store';
+import { useState } from 'react';
+import { getDefaultContent } from '@/lib/content-store';
 import { ProductVisual } from '@/components/ProductVisual';
+import { ProductLoading } from '@/components/ProductLoading';
+import { HeroScene } from '@/components/HeroScene';
+import { StoreHeader } from '@/components/StoreHeader';
+import { useStoreCart } from '@/components/StoreShopping';
+import { cafeMenu } from '@/data/cafeMenu';
+import { coffeeNotes } from '@/data/coffeeNotes';
+import { catalogCategories, officialStore, productPath } from '@/data/officialCatalog';
+import './storefront.css';
 
-const defaultAnswers = { taste: '', method: '', moment: '' };
-
-function MetricBar({ label, value }) {
-  return (
-    <div className="metric-bar">
-      <span>{label}</span>
-      <div>
-        {Array.from({ length: 5 }).map((_, index) => (
-          <i key={index} className={index < value ? 'filled' : ''} />
-        ))}
-      </div>
-    </div>
-  );
-}
+const initialContent = getDefaultContent();
+const methodNotes = {
+  V60: 'Una taza limpia y ligera que deja apreciar los matices del café.',
+  Espresso: 'Una extracción corta que concentra el cuerpo y el sabor.',
+  Prensa: 'Una preparación por inmersión que da una taza de textura amplia.',
+  Moka: 'Una taza intensa que puedes preparar en la cocina de casa.'
+};
+const spotlightIds = ['cafe-gourmet-origen-400g', 'cafe-especial-250g', 'cafe-tradicional-200g'];
+const experiences = [
+  {
+    title: 'Café para casa',
+    text: 'Elige tu café de altura o encuentra un método para prepararlo a tu gusto.',
+    image: '/editorial/cafeteria-lojanias.webp',
+    href: '#cafes-destacados',
+    action: 'Ver cafés'
+  },
+  {
+    title: 'Una pausa en Loja',
+    text: 'Pasa por nuestra cafetería para probar un filtrado, un espresso o algo de la cocina lojana.',
+    image: '/editorial/pausa-en-loja.webp',
+    portrait: true,
+    imageAlt: 'Bolsa de café Lojanías frente a una torre en Loja',
+    href: '#menu-cafeteria',
+    action: 'Ver menú'
+  },
+  {
+    title: 'Tostaduría y eventos',
+    text: 'Tostamos café para productores y preparamos propuestas para negocios, catas y celebraciones.',
+    image: '/editorial/tostadora.webp',
+    href: '#empresas-y-eventos',
+    action: 'Ver servicios'
+  }
+];
+const storeBenefits = [
+  'Tostado en origen',
+  '100% Arábica de altura',
+  'Seleccionado a mano',
+  'Proceso artesanal familiar',
+  'Envíos a todo el país'
+];
+const cafeAddress = 'Bernardo Valdivieso, entre Catacocha y Leopoldo Palacios, Loja.';
+const cafeDirections = 'https://www.google.com/maps/search/?api=1&query=Bernardo+Valdivieso+Catacocha+Leopoldo+Palacios+Loja';
 
 function getRecommendation(answers, products) {
-  const coffeeDark = products[0];
-  const coffeeBalanced = products[1] || products[0];
-  const coconut = products[2] || products[1] || products[0];
-
-  if (answers.moment === 'Regalar o compartir') {
-    return coffeeBalanced;
-  }
-
+  const coffees = products.filter((product) => ['Café Lojanías', 'Cafe de altura'].includes(product.category));
+  const special = coffees.find((product) => product.id === 'cafe-especial-250g');
+  const gourmet = coffees.find((product) => product.id === 'cafe-gourmet-origen-200g');
+  if (answers.moment === 'Regalar o compartir') return gourmet || special || coffees[0];
   if (answers.taste === 'Intenso y profundo' || answers.method === 'Espresso o moka') {
-    return coffeeDark;
+    return special || gourmet || coffees[0];
   }
-
-  if (answers.taste === 'Ligero y aromatico' || answers.method === 'Filtro o V60') {
-    return coffeeBalanced;
-  }
-
-  if (answers.method === 'Quiero algo versatil') {
-    return coffeeBalanced;
-  }
-
-  return coconut.category === 'Aceite de coco' && answers.taste === '' ? coffeeBalanced : coffeeBalanced;
+  return gourmet || special || coffees[0];
 }
 
-export function SiteShell() {
-  const [content, setContent] = useState(() => getDefaultContent());
-  const [answers, setAnswers] = useState(defaultAnswers);
-  const [activeMethod, setActiveMethod] = useState('V60');
+function searchableText(value) {
+  return value.normalize('NFD').replace(/\p{M}/gu, '').toLocaleLowerCase('es');
+}
 
-  useEffect(() => {
-    const stored = window.localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      try {
-        setContent(mergeWithDefaults(JSON.parse(stored)));
-      } catch {
-        setContent(getDefaultContent());
-      }
-    }
+function comparePrice(first, second) {
+  return Number(first.price.replace(/[^\d.]/g, '')) - Number(second.price.replace(/[^\d.]/g, ''));
+}
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
+function ProductCard({ product, id, onOpen }) {
+  return (
+    <article className="sf-product" id={id}>
+      <div className="sf-product-image">
+        <ProductVisual product={product} />
+        {product.size && <span className="sf-product-size">{product.size}</span>}
+      </div>
+      <div className="sf-product-meta">
+        <p className="sf-kicker">{product.category}</p>
+        <h3>{product.name}</h3>
+        {(product.publishedDescription || product.notes) && (
+          <p className="sf-product-description">{product.publishedDescription || product.notes}</p>
+        )}
+        {(product.format || product.roast) && (
+          <p className="sf-product-spec">{[product.format, product.roast].filter(Boolean).join(' · ')}</p>
+        )}
+        <div className="sf-product-buy">
+          <strong>{product.price}</strong>
+          <Link className="sf-text-link sf-product-trigger" aria-label={`Ver producto: ${product.name}`} href={productPath(product.id)} prefetch={false} onNavigate={(event) => onOpen(event, product.id)}>
+            Ver producto <span aria-hidden="true">↗</span>
+          </Link>
+        </div>
+      </div>
+    </article>
+  );
+}
 
-    document.querySelectorAll('[data-reveal]').forEach((node) => observer.observe(node));
+export function SiteShell({ content }) {
+  const [category, setCategory] = useState('');
+  const [sort, setSort] = useState('default');
+  const [answers, setAnswers] = useState({});
+  const [method, setMethod] = useState('');
+  const [search, setSearch] = useState('');
+  const [loadingProduct, setLoadingProduct] = useState(null);
 
-    return () => observer.disconnect();
-  }, []);
+  function openProduct(event, id) {
+    event.preventDefault();
+    setLoadingProduct(productPath(id));
+  }
 
-  const recommendation = useMemo(
-    () => getRecommendation(answers, content.featuredProducts),
-    [answers, content.featuredProducts]
+  const { brand, hero, featuredProducts, story, sensory, quiz, footer, finalCta } = content;
+  const cart = useStoreCart(featuredProducts);
+  const spotlight = spotlightIds.map((id) => featuredProducts.find((product) => product.id === id)).filter(Boolean);
+  const categories = [...new Set([...catalogCategories.map(({ name }) => name), ...featuredProducts.map(({ category }) => category)])];
+  const searchTerms = searchableText(search.trim()).split(/\s+/).filter(Boolean);
+  const products = featuredProducts.filter((product) => {
+    if (category && product.category !== category) return false;
+    if (!searchTerms.length) return true;
+    const keywords = searchableText([product.name, product.category, product.size].join(' '));
+    return searchTerms.every((term) => keywords.includes(term));
+  });
+  if (sort === 'name') products.sort((a, b) => a.name.localeCompare(b.name, 'es'));
+  if (sort === 'price-asc') products.sort(comparePrice);
+  if (sort === 'price-desc') products.sort((a, b) => comparePrice(b, a));
+  const activeMethod = method || sensory.methods[0];
+  const recommended = getRecommendation(answers, featuredProducts);
+  const phone = footer.phone.replace(/\D/g, '');
+  const whatsapp = phone && phone !== '593990000000' ? `https://wa.me/${phone}` : '';
+  const cafeOrder = whatsapp && `${whatsapp}?text=${encodeURIComponent('Hola, Lojanías. Quisiera hacer un pedido de la cafetería.')}`;
+  const businessInquiry = whatsapp
+    ? `${whatsapp}?text=${encodeURIComponent('Hola, Lojanías. Quisiera solicitar una propuesta para mi empresa o evento.')}`
+    : `mailto:${footer.email}?subject=${encodeURIComponent('Consulta para empresas y eventos')}`;
+  const testimonials = content.testimonials.filter((item) =>
+    item.quote && !initialContent.testimonials.some((sample) => sample.quote === item.quote)
   );
 
-  const methodsMap = {
-    V60: 'Extrae una taza limpia y ordenada, ideal para un perfil balanceado y elegante.',
-    Espresso: 'Concentra cuerpo y profundidad para quien quiere una experiencia mas intensa.',
-    Prensa: 'Resalta textura y amplitud aromatica con una preparacion simple.',
-    Moka: 'Aporta fuerza, estructura y un perfil persistente para la rutina diaria.'
-  };
-
-  const coffeeProducts = content.featuredProducts.filter((product) => product.category === 'Cafe de altura');
-  const coconutProducts = content.featuredProducts.filter((product) => product.category === 'Aceite de coco');
-
   return (
-    <div className="site-root">
-      <header className="site-header site-header-home" data-reveal>
-        <nav className="nav-side nav-left" aria-label="Principal izquierda">
-          <a href="#inicio">Inicio</a>
-          <a href="#historia">Nuestras raices</a>
-          <a href="#sensorial">Perfil</a>
-        </nav>
-        <div className="nav-brand">
-          <img
-            className="nav-brand-logo"
-            src="/brand/lojanias-wordmark-isolated.png"
-            alt="Lojanias"
-            width="966"
-            height="298"
-          />
-        </div>
-        <nav className="nav-side nav-right" aria-label="Principal derecha">
-          <a href="#coleccion">Tienda</a>
-          <a href="#historia">Lojanias</a>
-          <a href="#cta-final">Contacto</a>
-          <a href="#coleccion" className="cart-link" aria-label="Carrito">🛒</a>
-        </nav>
-      </header>
+    <div className="storefront">
+      <a className="sf-skip" href="#inicio">Saltar al contenido</a>
+      <StoreHeader brand={brand} count={cart.count} onHome />
 
       <main id="inicio">
-        <section className="hero-section hero-home" data-reveal>
-          <div className="hero-image-overlay">
-            <div className="hero-content">
-              <img
-                className="hero-wordmark-logo"
-                src="/brand/lojanias-wordmark-hero-cream.png"
-                alt="Lojanias"
-                width="926"
-                height="252"
-              />
-              <p>CAFES EXTRAORDINARIOS. ORIGEN LOJANO.</p>
-              <a className="hero-outline-cta" href="#coleccion">CONOCE NUESTROS CAFES</a>
-            </div>
-          </div>
-        </section>
-
-        <section className="value-section" data-reveal>
-          <div className="section-heading split compact">
-            <div>
-              <span className="eyebrow">Propuesta de valor</span>
-              <h2>Nuestra Herencia Loja</h2>
-            </div>
-            <p>
-              Cafe de altura, oficio artesanal y una estetica sobria que honra el origen lojano con una experiencia
-              clara, calida y memorable.
-            </p>
-          </div>
-          <div className="value-grid four-up">
-            {content.valueProps.map((item) => (
-              <article key={item.title} className="value-card">
-                <span>{item.stat}</span>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="collection-section" id="coleccion">
-          <div className="section-heading" data-reveal>
-            <span className="eyebrow">Colecciones</span>
-            <h2>Productos separados por categoria para comprar sin friccion.</h2>
-          </div>
-
-          <div className="collection-grid">
-            <article className="collection-card" data-reveal>
-              <div className="collection-header">
-                <span>Categoria principal</span>
-                <h3>Cafe de altura</h3>
-                <p>Presentaciones clasicas, premium y listas para consumo diario o regalo.</p>
-              </div>
-              <ul className="collection-list">
-                <li>Bolsa negra premium 200 g</li>
-                <li>Bolsa kraft clasica 200 g</li>
-                <li>Presentaciones medianas y familiares</li>
-                <li>Opciones para grano o molido segun disponibilidad</li>
-              </ul>
-            </article>
-
-            <article className="collection-card" data-reveal>
-              <div className="collection-header">
-                <span>Categoria complementaria</span>
-                <h3>Aceite de coco</h3>
-                <p>Una linea natural en distintos tamanos para complementar la tienda.</p>
-              </div>
-              <ul className="collection-list">
-                <li>Frasco pequeno</li>
-                <li>Frasco mediano</li>
-                <li>Frasco grande</li>
-                <li>Formato familiar</li>
-              </ul>
-            </article>
-          </div>
-        </section>
-
-        <section className="featured-section">
-          <div className="section-heading split compact" data-reveal>
-            <div>
-              <span className="eyebrow">Destacados</span>
-              <h2>La seleccion visible arriba del scroll importante.</h2>
-            </div>
-            <p>
-              Esta zona sigue patrones de ecommerce que funcionan: card clara, informacion resumida, precio visible
-              y CTA rapido sin distraer del producto.
-            </p>
-          </div>
-          <div className="product-grid">
-            {content.featuredProducts.map((product) => (
-              <article key={product.id} className="product-card" data-reveal>
-                <div className="product-topline">
-                  <span>{product.badge}</span>
-                  <strong>{product.category}</strong>
+        <section className="sf-hero" aria-labelledby="titulo-portada">
+          <HeroScene footer={(
+            <>
+              <div className="sf-hero-reticle" aria-hidden="true"><i /><i /><i /></div>
+              <div className="sf-hero-rail">
+                <div className="sf-hero-index"><span aria-hidden="true">✦</span> <span>01 / Origen lojano</span></div>
+                <div className="sf-hero-caption">
+                  <strong>Café natural de altura · 400 g</strong>
                 </div>
-                <ProductVisual product={product} />
-                <div className="product-body">
-                  <h3>{product.name}</h3>
-                  <p>{product.notes}</p>
-                  <ul>
-                    <li>{product.format}</li>
-                    <li>{product.size}</li>
-                    <li>{product.roast}</li>
-                  </ul>
-                </div>
-                <div className="product-footer">
-                  <strong>{product.price}</strong>
-                  <div className="product-buttons">
-                    <a className="button button-tertiary" href="#sensorial">Ver detalle</a>
-                    <a className="button button-primary" href="#cta-final">Comprar</a>
-                  </div>
+              </div>
+            </>
+          )}>
+            <div className="sf-hero-copy">
+              <p className="sf-kicker"><i aria-hidden="true" /> {brand.tagline}</p>
+              <h1 id="titulo-portada">{hero.title}</h1>
+              <p className="sf-hero-description">{hero.description}</p>
+              <div className="sf-actions">
+                <a className="sf-button sf-hero-button" href={brand.ctaHref}>{brand.ctaLabel} <span aria-hidden="true">↗</span></a>
+                <a className="sf-text-link" href={brand.secondaryCtaHref}>{brand.secondaryCtaLabel} <span aria-hidden="true">↓</span></a>
+              </div>
+            </div>
+          </HeroScene>
+        </section>
+
+        {spotlight.length > 0 && (
+          <section className="sf-width sf-section sf-spotlight" id="cafes-destacados" aria-labelledby="titulo-destacados">
+            <div className="sf-section-heading">
+              <div>
+                <p className="sf-kicker">Tostado en origen</p>
+                <h2 id="titulo-destacados">Best Sellers</h2>
+              </div>
+              <a className="sf-text-link" href="#coleccion">Ver todo el catálogo <span aria-hidden="true">↓</span></a>
+            </div>
+            <div className="sf-products">
+              {spotlight.map((product) => <ProductCard key={product.id} product={product} onOpen={openProduct} />)}
+            </div>
+          </section>
+        )}
+
+        <section className="sf-story sf-founder" id="historia" aria-labelledby="titulo-historia">
+          <div className="sf-width sf-story-grid">
+            <figure>
+              <img src="/editorial/miguel-castillo.webp" alt="Miguel Castillo, fundador de Lojanías" loading="lazy" width="1000" height="1250" />
+            </figure>
+            <div>
+              <p className="sf-kicker">Raíces en Quilanga</p>
+              <h2 id="titulo-historia">{story.title}</h2>
+              {story.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+              <p className="sf-signature">{brand.owner} <span>·</span> {footer.address}</p>
+            </div>
+          </div>
+        </section>
+
+        <section className="sf-width sf-section sf-experiences" id="descubre-lojanias" aria-labelledby="titulo-experiencias">
+          <div className="sf-section-heading">
+            <div>
+              <p className="sf-kicker">Tienda, cafetería y tostaduría</p>
+              <h2 id="titulo-experiencias">Descubre Lojanías.</h2>
+            </div>
+          </div>
+          <div className="sf-experience-grid">
+            {experiences.map(({ title, text, image, imageAlt, portrait, href, action }) => (
+              <article key={title} className="sf-experience-card">
+                <img className={portrait ? 'sf-experience-portrait' : undefined} src={image} alt={imageAlt || ''} loading="lazy" />
+                <div>
+                  <h3>{title}</h3>
+                  <p>{text}</p>
+                  <a className="sf-text-link" href={href}>{action} <span aria-hidden="true">↘</span></a>
                 </div>
               </article>
             ))}
           </div>
         </section>
 
-        <section className="sensory-section" id="sensorial">
-          <div className="sensory-copy" data-reveal>
-            <span className="eyebrow">Experiencia sensorial</span>
-            <h2>{content.sensory.title}</h2>
-            <p>{content.sensory.description}</p>
-            <div className="note-cloud">
-              {content.sensory.notes.map((note) => (
-                <span key={note}>{note}</span>
+        <section className="sf-width sf-section sf-local-section" id="coleccion" aria-labelledby="titulo-coleccion">
+          <div className="sf-section-heading">
+            <div>
+              <p className="sf-kicker">Compra por categoría</p>
+              <h2 id="titulo-coleccion">La colección.</h2>
+            </div>
+          </div>
+          <div className="sf-category-grid">
+            {catalogCategories.map(({ name, image }) => (
+              <button key={name} type="button" aria-pressed={category === name} onClick={() => setCategory(category === name ? '' : name)}>
+                <img src={officialStore + image} alt="" loading="lazy" />
+                <span>{name} <span aria-hidden="true">↗</span></span>
+              </button>
+            ))}
+          </div>
+          <label className="sf-catalog-search">
+            <span>Buscar en el catálogo</span>
+            <input id="buscar" type="search" placeholder="Ej. café, moka o 400 g"
+              value={search} onChange={(event) => setSearch(event.target.value)} />
+          </label>
+          <div className="sf-catalog-toolbar">
+            <fieldset className="sf-filters">
+              <legend>Filtros</legend>
+              {['', ...categories].map((item) => (
+                <button key={item} type="button" aria-pressed={category === item} onClick={() => setCategory(item)}>
+                  {item || 'Todos'}
+                </button>
+              ))}
+            </fieldset>
+            <p className="sf-product-count" aria-live="polite">{products.length} {products.length === 1 ? 'artículo' : 'artículos'}</p>
+            <label className="sf-sort">
+              Ordenar
+              <select value={sort} onChange={(event) => setSort(event.target.value)}>
+                <option value="default">Orden del catálogo</option>
+                <option value="name">Nombre: A a Z</option>
+                <option value="price-asc">Menor precio</option>
+                <option value="price-desc">Mayor precio</option>
+              </select>
+            </label>
+          </div>
+          {!products.length && <p>No encontramos productos con esa búsqueda.</p>}
+          <div className="sf-products">
+            {products.map((product) => (
+              <ProductCard key={product.id} id={product.id} product={product} onOpen={openProduct} />
+            ))}
+          </div>
+        </section>
+
+        <section className="sf-width sf-section sf-brew" id="sensorial">
+          <div>
+            <p className="sf-kicker">03 / Preparación</p>
+            <h2>{sensory.title}</h2>
+            <p>{sensory.description}</p>
+            <div className="sf-filters" role="group" aria-label="Método de preparación">
+              {sensory.methods.map((item) => (
+                <button key={item} type="button" aria-pressed={activeMethod === item} onClick={() => setMethod(item)}>{item}</button>
               ))}
             </div>
-            <p className="roast-callout">{content.sensory.roastLabel}</p>
+            <p className="sf-method-note" aria-live="polite">{methodNotes[activeMethod]}</p>
+            <details className="sf-tips">
+              <summary>Consejos para preparar tu café</summary>
+              {content.brewTips.map((tip) => <p key={tip.title}><strong>{tip.title}.</strong> {tip.text}</p>)}
+            </details>
           </div>
-          <div className="sensory-panel" data-reveal>
-            <div className="metric-panel">
-              <h3>Lectura rapida del perfil</h3>
-              <MetricBar label="Intensidad" value={4} />
-              <MetricBar label="Acidez" value={3} />
-              <MetricBar label="Cuerpo" value={4} />
-            </div>
-            <div className="brew-selector">
-              <h3>Metodo recomendado</h3>
-              <div className="method-tabs">
-                {content.sensory.methods.map((method) => (
-                  <button
-                    key={method}
-                    className={activeMethod === method ? 'active' : ''}
-                    onClick={() => setActiveMethod(method)}
-                    type="button"
-                  >
-                    {method}
-                  </button>
-                ))}
-              </div>
-              <p>{methodsMap[activeMethod]}</p>
-            </div>
-          </div>
-        </section>
-
-        <section className="story-section" id="historia">
-          <div className="story-copy" data-reveal>
-            <span className="eyebrow">{content.story.eyebrow}</span>
-            <h2>{content.story.title}</h2>
-            {content.story.paragraphs.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-            <div className="owner-signature">
-              <span>Direccion de marca</span>
-              <strong>{content.brand.owner}</strong>
-            </div>
-          </div>
-          <div className="story-panel" data-reveal>
-            <div className="story-facts">
-              <div>
-                <span>Ciudad</span>
-                <strong>Loja</strong>
-              </div>
-              <div>
-                <span>Pais</span>
-                <strong>Ecuador</strong>
-              </div>
-              <div>
-                <span>Marca</span>
-                <strong>{content.brand.name}</strong>
-              </div>
-            </div>
-            <p>
-              El tono general del sitio busca que el visitante sienta origen, confianza y calidad antes de llegar al detalle de compra.
-            </p>
-          </div>
-        </section>
-
-        <section className="quiz-section" data-reveal>
-          <div className="section-heading split compact">
-            <div>
-              <span className="eyebrow">Funcionalidad interactiva</span>
-              <h2>{content.quiz.title}</h2>
-            </div>
-            <p>{content.quiz.description}</p>
-          </div>
-          <div className="quiz-grid">
-            <div className="quiz-form">
-              {content.quiz.questions.map((question) => (
+          {recommended && (
+            <div className="sf-quiz">
+              <h3>{quiz.title}</h3>
+              <p>{quiz.description}</p>
+              {quiz.questions.map((question) => (
                 <label key={question.id}>
-                  <span>{question.label}</span>
-                  <select
-                    value={answers[question.id]}
-                    onChange={(event) =>
-                      setAnswers((current) => ({ ...current, [question.id]: event.target.value }))
-                    }
-                  >
-                    <option value="">Selecciona una opcion</option>
-                    {question.options.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
+                  {question.label}
+                  <select value={answers[question.id] || ''} onChange={(event) => setAnswers({ ...answers, [question.id]: event.target.value })}>
+                    <option value="">Elige una opción</option>
+                    {question.options.map((option) => <option key={option}>{option}</option>)}
                   </select>
                 </label>
               ))}
-            </div>
-            <div className="quiz-result">
-              <span>Recomendacion</span>
-              <h3>{recommendation.name}</h3>
-              <p>{recommendation.notes}</p>
-              <div className="quiz-pills">
-                <strong>{recommendation.format}</strong>
-                <strong>{recommendation.size}</strong>
-                <strong>{recommendation.method}</strong>
+              <div className="sf-result" aria-live="polite">
+                <p className="sf-kicker">Tu recomendación</p>
+                <strong>{recommended.name}</strong>
+                <Link className="sf-text-link" href={productPath(recommended.id)} prefetch={false} onNavigate={(event) => openProduct(event, recommended.id)}>Ver café <span aria-hidden="true">↗</span></Link>
               </div>
-              <a className="button button-primary" href="#coleccion">Ver producto</a>
             </div>
-          </div>
+          )}
         </section>
 
-        <section className="testimonial-section" id="testimonios">
-          <div className="section-heading" data-reveal>
-            <span className="eyebrow">Prueba social</span>
-            <h2>Confianza y lectura inmediata de marca.</h2>
-          </div>
-          <div className="testimonial-grid">
-            {content.testimonials.map((item) => (
-              <article key={item.name + item.role} className="testimonial-card" data-reveal>
-                <div className="stars" aria-label={`${item.rating} de 5 estrellas`}>
-                  {'★★★★★'.slice(0, item.rating)}
-                </div>
-                <p>{item.quote}</p>
-                <strong>{item.name}</strong>
-                <span>{item.role}</span>
-              </article>
-            ))}
-          </div>
-        </section>
+        {testimonials.length > 0 && (
+          <section className="sf-width sf-section" id="testimonios">
+            <h2>Desde la mesa.</h2>
+            <div className="sf-products">
+              {testimonials.map((item) => (
+                <blockquote key={item.name + item.role}>
+                  <p>{item.quote}</p>
+                  <footer>{item.name} · {item.role}</footer>
+                </blockquote>
+              ))}
+            </div>
+          </section>
+        )}
 
-        <section className="brew-section" data-reveal>
-          <div className="section-heading split compact">
+        <section className="sf-width sf-section sf-local-section" id="blog" aria-labelledby="titulo-blog" tabIndex={-1}>
+          <div className="sf-section-heading">
             <div>
-              <span className="eyebrow">Preparacion</span>
-              <h2>Una guia corta para disfrutar mejor el producto.</h2>
+              <p className="sf-kicker">Noticias y guías</p>
+              <h2 id="titulo-blog">Blog</h2>
             </div>
-            <p>Consejos simples para elevar la taza sin sobrecargar al usuario con demasiada informacion.</p>
+            <p>Historias de origen y consejos para preparar tu café.</p>
           </div>
-          <div className="brew-grid">
-            {content.brewTips.map((tip) => (
-              <article key={tip.title} className="brew-card">
-                <h3>{tip.title}</h3>
-                <p>{tip.text}</p>
-              </article>
+          <div className="sf-local-grid">
+            {coffeeNotes.map(({ title, text, link }) => (
+              <details className="sf-local-detail" key={title}>
+                <summary>{title}</summary>
+                <p>{text}</p>
+                {link && <a className="sf-text-link" href={link[1]}>{link[0]} <span aria-hidden="true">↓</span></a>}
+              </details>
             ))}
           </div>
         </section>
 
-        <section className="final-cta" id="cta-final" data-reveal>
-          <span className="eyebrow">Compra directa</span>
-          <h2>{content.finalCta.title}</h2>
-          <p>{content.finalCta.description}</p>
-          <div className="hero-actions center">
-            <a className="button button-primary" href="#coleccion">{content.finalCta.primaryLabel}</a>
-            <a className="button button-secondary dark" href={`https://wa.me/${content.footer.phone.replace(/\D/g, '')}`}>
-              {content.finalCta.secondaryLabel}
-            </a>
+        <section className="sf-width sf-section sf-local-section" id="menu-cafeteria" aria-labelledby="titulo-menu" tabIndex={-1}>
+          <div className="sf-section-heading">
+            <div>
+              <p className="sf-kicker">Cafetería de especialidad · Loja</p>
+              <h2 id="titulo-menu">Menú Cafetería</h2>
+              <p className="sf-cafe-address">{cafeAddress}</p>
+              <a className="sf-text-link" href={cafeDirections}>
+                Cómo llegar <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+            {cafeOrder && <a className="sf-text-link" href={cafeOrder}>Pedir por WhatsApp <span aria-hidden="true">↗</span></a>}
+          </div>
+          <div className="sf-local-grid">
+            {cafeMenu.map(({ name, items }, index) => (
+              <details className="sf-local-detail" key={name} open={index === 0}>
+                <summary>{name}</summary>
+                <ul className="sf-menu-items">
+                  {items.map(([item, price]) => (
+                    <li key={item}><span>{item}</span><span>{price}</span></li>
+                  ))}
+                </ul>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <section className="sf-story" id="empresas-y-eventos" aria-labelledby="titulo-empresas" tabIndex={-1}>
+          <div className="sf-width sf-story-grid">
+            <figure>
+              <img src="/editorial/tostadora.webp" alt="Tostadora y granos de café" loading="lazy" width="1600" height="900" />
+            </figure>
+            <div>
+              <p className="sf-kicker">Tostaduría y pedidos al por mayor</p>
+              <h2 id="titulo-empresas">Empresas y eventos</h2>
+              <p>Café para oficinas, cafeterías y hoteles, además de regalos corporativos, catas y talleres para reuniones o celebraciones.</p>
+              <p>Para productores ofrecemos trillado, tostado según el perfil del grano, molienda y empacado por peso.</p>
+              <a className="sf-text-link" href={businessInquiry}>Solicitar una propuesta <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+        </section>
+
+        <section className="sf-benefits">
+          <div className="sf-width">
+            <p className="sf-kicker">De Loja a tu mesa</p>
+            <h2>¿Por qué elegir Lojanías?</h2>
+            <ul>{storeBenefits.map((benefit) => <li key={benefit}>{benefit}</li>)}</ul>
+          </div>
+        </section>
+
+        <section className="sf-width sf-section sf-contact" id="contacto" aria-labelledby="titulo-contacto" tabIndex={-1}>
+          <div className="sf-contact-grid">
+            <div className="sf-contact-heading">
+              <p className="sf-kicker">Lojanías · Loja, Ecuador</p>
+              <h2 id="titulo-contacto">Ubicación y contacto</h2>
+            </div>
+            <div className="sf-contact-visit">
+              <h3>Visita la cafetería</h3>
+              <address>{cafeAddress}</address>
+              <dl className="sf-contact-hours">
+                <dt>Lunes a viernes</dt>
+                <dd><span>09:00–12:00</span> y <span>16:00–21:00</span></dd>
+                <dt>Sábados</dt>
+                <dd>16:00–21:00</dd>
+              </dl>
+              <a className="sf-text-link" href={cafeDirections}>Cómo llegar en Google Maps <span aria-hidden="true">↗</span></a>
+            </div>
+            <img
+              className="sf-contact-photo"
+              src="/editorial/cafe-lojanias-contacto.webp"
+              alt="Granos tostados y bolsas de café Lojanías"
+              width="447"
+              height="447"
+              loading="lazy"
+            />
+            <div className="sf-contact-reach">
+              <h3>{finalCta.title}</h3>
+              <p>{finalCta.description}</p>
+              <ul className="sf-contact-links">
+                {whatsapp && <li><a className="sf-text-link" href={`tel:+${phone}`}>Llamar al {footer.phone}</a></li>}
+                {footer.email && <li><a className="sf-text-link" href={`mailto:${footer.email}`}>{footer.email}</a></li>}
+              </ul>
+              {whatsapp && (
+                <a className="sf-button sf-button-amber" href={whatsapp}>
+                  {finalCta.secondaryLabel} <span aria-hidden="true">↗</span>
+                </a>
+              )}
+            </div>
+          </div>
+        </section>
+
+        <section className="sf-footer" id="cta-final">
+          <div className="sf-width">
+            <div className="sf-newsletter">
+              <p>El café que se comparte, sabe mejor.</p>
+              <a className="sf-text-link" href={officialStore + '/collections/all#footer-email'}>Registrarme al boletín <span aria-hidden="true">↗</span></a>
+            </div>
+            <footer className="sf-footer-meta">
+              <span>{footer.legal}</span>
+              <a href={officialStore + '/policies'}>Términos y políticas</a>
+              <a href="https://www.facebook.com/share/1DCAyaMFq7">Facebook</a>
+              <a href="https://www.instagram.com/lojanias">Instagram</a>
+              <Link href="/admin">Administración</Link>
+            </footer>
           </div>
         </section>
       </main>
-
-      <footer className="site-footer">
-        <div>
-          <strong>{content.brand.name}</strong>
-          <p>{content.footer.legal}</p>
-        </div>
-        <div>
-          <span>{content.footer.address}</span>
-          <span>{content.footer.phone}</span>
-          <span>{content.footer.email}</span>
-        </div>
-        <div>
-          <span>{content.footer.instagram}</span>
-          <Link href="/admin">Editar contenido</Link>
-        </div>
-      </footer>
+      {loadingProduct && <ProductLoading href={loadingProduct} onCancel={() => setLoadingProduct(null)} />}
     </div>
   );
 }

@@ -29,7 +29,7 @@ export function ProductVisual({ product }) {
   if (product.imageUrl) {
     return (
       <div className="product-visual product-photo-wrap">
-        <img className="product-photo" src={product.imageUrl} alt={product.name} />
+        <img className="product-photo" src={product.imageUrl} alt={product.name} loading="lazy" />
       </div>
     );
   }

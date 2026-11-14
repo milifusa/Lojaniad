@@ -1,8 +1,8 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'Lojanias | Cafe de altura',
-  description: 'Landing ecommerce premium para Lojanias, cafe de altura de Loja, Ecuador.'
+  title: 'Lojanías | Café de altura de Loja',
+  description: 'Descubre el café de altura de Lojanías, sus perfiles de tueste y sus métodos de preparación. Desde Loja, Ecuador.'
 };
 
 export default function RootLayout({ children }) {
